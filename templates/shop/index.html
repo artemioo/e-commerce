@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for p in product %}
+ <h3> {{ p.name }}</h3>
+  {{ p.price }}
+<br>
+<br>
+  <img src="{{ p.image.url }}" width="200" height="300" alt="" >
+{% endfor %}
+</body>
+</html>
