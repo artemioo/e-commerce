@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <meta charset="UTF-8">
+    <title>e-commerce</title>
+</head>
+<body>
+    {% block header %}
+            {% include 'include/header.html' %}
+    {% endblock header %}
+
+     {% block main %}
+    {% if user.is_authenticated %}
+            Welcome, {{ user.username }}. Thanks for logging in. <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+            Welcome, new user. <a href="{% url 'login' %}">Please log in</a> or <a href="{% url 'register' %}">regi</a>
+    {% endif %}
+
+<div class="left-ads-display col-lg-9">
+    <div class="row">
+        {% for product in product_list %}
+        <div class="col-md-4 product-men">
+            <div class="product-shoe-info editContent text-center mt-lg-4" >
+                <div class="men-thumb-item">
+                    <img src="{{ product.image.url }}" width="350" height="500" alt="" >
+                </div>
+                <div class="item-info-product">
+                    <h4 class="">
+                        <a href="{{ product.get_absolute_url }}" class="editContent" >
+                            {{ product.name }}</a>
+                    </h4>
+                    <div class="product_price">
+                        <div class="grid-price">
+                            <span class="money editContent" >{{ product.price }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+
+ {% endblock main %}
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+
+def logout_view(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect('/')
+    return render(request, 'accounts/logout.html', {})
+
+
+def register_view(request):
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            return redirect('login')
+    context = {'form': form}
+    return render(request, 'accounts/registration.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()  # метод который работает только с ЭТОЙ формой
+            login(request, user)
+            return redirect('/')
+    else:
+        form = AuthenticationForm(request)
+    context = {'form': form}
+    return render(request, 'accounts/login.html', context)

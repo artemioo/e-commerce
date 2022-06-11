@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-detail text-center" >
+    <h3> {{ product.name }} </h3>
+    Цена:  {{ product.price }}
+<br>
+<br>
+  <img src="{{ product.image.url }}" width="200" height="300" alt="" >
+    <br>
+
+{{ product.description }}
+</div>
+    {% endblock content %}
