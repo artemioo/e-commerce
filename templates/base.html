@@ -21,6 +21,7 @@
             Welcome, new user. <a href="{% url 'login' %}">Please log in</a> or <a href="{% url 'register' %}">regi</a>
     {% endif %}
 
+    <a href="{% url 'create' %}">Добавить</a> Товар
 <div class="left-ads-display col-lg-9">
     <div class="row">
         {% for product in product_list %}
@@ -38,6 +39,13 @@
                         <div class="grid-price">
                             <span class="money editContent" >{{ product.price }}</span>
                         </div>
+                        {% if user.is_authenticated %}
+                        <div class="grid-price">
+                            <a href="{% url 'update' product.slug %}"> Update </a>
+                        </div>
+                        <a href="{% url 'delete' product.slug %}">Delete</a>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>

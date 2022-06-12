@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="logout-main text-center">
     {% if request.user.is_authenticated %}
     <h1>Are you sure you want to logout?</h1>
 <form method="POST">
@@ -11,5 +12,5 @@
 {% else %}
 You are not logged in. Would you like to <a href="{% url 'login' %}">Login</a>
 {% endif %}
-
+</div>
 {% endblock content %}
