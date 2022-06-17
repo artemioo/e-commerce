@@ -4,11 +4,23 @@
 <div class="main-detail text-center" >
     <h3> {{ product.name }} </h3>
     Цена:  {{ product.price }}
+
 <br>
+
 <br>
   <img src="{{ product.image.url }}" width="200" height="300" alt="" >
+
     <br>
 
+        <h2>
+        <a href="{{ product.category.get_absolute_url }}">{{product.category }}</a>
+    </h2>
 {{ product.description }}
+    <br>
+    <form action="{% url 'cart_add' product.id %}" method="post">
+    {{ cart_product_form }}
+    {% csrf_token %}
+    <input type="submit" value="Add to cart">
+</form>
 </div>
     {% endblock content %}

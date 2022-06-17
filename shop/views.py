@@ -3,13 +3,14 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from .models import Product, Category
 from .forms import CreateProductForm
+from cart.forms import CartAddProductForm
 
 
 class CreateProduct(CreateView):
@@ -53,10 +54,15 @@ class Categorize(DetailView):
     template_name = 'shop/categorize.html'
 
 
-class ProductDetail(DetailView):
-    """ Информация о продукте """
-    model = Product
-    slug_field = 'slug'
-    template_name = 'shop/product_detail.html'
+# class ProductDetail(DetailView):
+#     """ Информация о продукте """
+#     model = Product
+#     slug_field = 'slug'
+#     template_name = 'shop/product_detail.html'
+#     cart_product_form = CartAddProductForm()
 
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug, available=True)
+    cart_product_form = CartAddProductForm()
+    return render(request, 'shop/product_detail.html', {'product': product, 'cart_product_form': cart_product_form})
 
