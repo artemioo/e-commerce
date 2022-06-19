@@ -57,7 +57,7 @@ class Cart(object):
         self.session.modified = True  #  отметить сеанс как измененный чтобы убедиться что он сохранен
 
     def __len__(self):
-        """ Подсчет всех товаро в корзине """
+        """ Подсчет всех товаров в корзине """
         return sum(item['quantity'] for item in self.cart.values())
 
     def get_total_price(self):

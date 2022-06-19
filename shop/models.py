@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -41,5 +42,25 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_review(self):
+        return self.review_set.filter(parent__isnull=True) # только родительские отзывы
+
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.SET_NULL, null=True)
+    text = models.TextField('Сообщение', max_length=1000)
+    parent = models.ForeignKey(
+        'self', verbose_name='Родитель', on_delete=models.SET_NULL, blank=True, null=True
+    )
+
+    product = models.ForeignKey(Product, verbose_name='Товар', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} - {self.product}'
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'

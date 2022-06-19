@@ -7,6 +7,12 @@
       rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>e-commerce</title>
+    <style>
+    .welcome {
+      text-align: right;
+    }
+</style>
+
 </head>
 <body>
     {% block header %}
@@ -15,11 +21,12 @@
 
      {% block main %}
     {% if user.is_authenticated %}
+    <div class="welcome">
             Welcome, {{ user.username }}. Thanks for logging in. <a href="{% url 'logout' %}">Logout</a>
             {% else %}
             Welcome, new user. <a href="{% url 'login' %}">Please log in</a> or <a href="{% url 'register' %}">regi</a>
     {% endif %}
-
+    </div>
     <h4> твоя session </h4>
 
     <h2 class="mb-3"> Session key: {{ request.session.session_key }}</h2>
@@ -40,8 +47,31 @@
     </div>
 
     <hr>
+    {% if user.is_staff %}
+    <a href="{% url 'create' %}">Добавить Товар </a>
+    {% endif %}
 
-    <a href="{% url 'create' %}">Добавить</a> Товар
+<div class="right-side my-4" style="text-align:right; position: right;">
+    <form action="{% url 'home' %}">
+        <h3 class="sear-head editContent">Категории</h3>
+        <ul class="w3layouts-box-list">
+            {% for category in categories %}
+        <li class="editContent">
+            <input type="checkbox" aria-label="Search" name="category" value="{{ category.id }}">
+        <span>  {{ category.name }}</span>
+            </li>
+        {% endfor %}
+        </ul>
+
+        <input  type="number" placeholder="min price" aria-label="Search" name="min_price" min="1"  value="1">
+        <br>
+        <input  type="number" placeholder="max price" aria-label="Search" name="max_price" min="0">
+        <br>
+
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+</div>
+
 <div class="left-ads-display col-lg-9">
     <div class="row">
         {% for product in product_list %}
