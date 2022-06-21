@@ -38,7 +38,7 @@ class ProductView(ListView):
     """ Главная страница """
     model = Product
     template_name = 'base.html'
-    # queryset = Product.objects.filter(available=True)
+    paginate_by = 2
 
     def get_queryset(self):
         search_query = self.request.GET.get('search', '')

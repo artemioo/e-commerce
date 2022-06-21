@@ -22,6 +22,11 @@
       <li class="nav-item">
           <a class="nav-link active" href="{% url 'favorites_list' %}">Favorite</a>
         </li>
+        {% if user.is_staff %}
+          <li class="nav-item">
+          <a class="nav-link active" href="{% url 'admin:index' %}">Admin</a>
+        </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
           </a>

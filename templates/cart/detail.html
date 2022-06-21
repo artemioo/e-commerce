@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
     <h1>Your shopping cart</h1>
-    <table class="cart">
+    <table class="cart" style="border-spacing: 10px; border-collapse: separate;">
         <thead>
         <tr>
             <th>Image</th>
@@ -42,7 +42,9 @@
         </tbody>
     </table>
     <p class="text-right">
-        <a href='/' class="button light">Continue shopping</a>
-        <a href="#" class="button">Checkout</a>
+        <button style="color: #556B2F;"> <a href='/' class="button light" style="text-decoration: none; color: #6495ED">Continue shopping</a> </button>
+        {% if cart|length > 0 %}
+        <button style="color: #556B2F;"> <a href="{% url 'order_create' %}" class="button">Checkout</a> </button>
+        {% endif %}
     </p>
 {% endblock %}

@@ -26,19 +26,33 @@
             {% else %}
             Welcome, new user. <a href="{% url 'login' %}">Please log in</a> or <a href="{% url 'register' %}">regi</a>
     {% endif %}
+        <div class="cart-info">
+            {% with total_items=cart|length %}
+            {% if cart|length > 0 %}
+            Your cart:
+            <a href="{% url 'cart_detail' %}">
+            {{ total_items }} item{{ total_items|pluralize }},
+            ${{ cart.get_total_price }}
+            </a>
+            {% else %}
+            Your cart is empty.
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="favortites">
+            <a href="{% url 'favorites_list' %}"> Избранное </a>
+
+            <form action="{% url 'delete_favorites' %}" method="post"> {% csrf_token %}
+                <input type="hidden" name="url_from" value="{{ request.path }}">
+                <!--            <button type="submit" class="btn btn-danger"> Delete favorites </button>-->
+            </form>
+        </div>
     </div>
     <h4> твоя session </h4>
 
     <h2 class="mb-3"> Session key: {{ request.session.session_key }}</h2>
 
-    <div class="d-flex">
-        <a href="{% url 'favorites_list' %}"> Избранное </a>
 
-        <form action="{% url 'delete_favorites' %}" method="post"> {% csrf_token %}
-            <input type="hidden" name="url_from" value="{{ request.path }}">
-            <button type="submit" class="btn btn-danger"> Delete favorites </button>
-        </form>
-    </div>
 
     <div class="jumbotron">
         <div>{{ request.session.keys }}</div>
@@ -54,7 +68,7 @@
 <div class="right-side my-4" style="text-align:right; position: right;">
     <form action="{% url 'home' %}">
         <h3 class="sear-head editContent">Категории</h3>
-        <ul class="w3layouts-box-list">
+        <ul class="w3layouts-box-list" style="list-style-type: none">
             {% for category in categories %}
         <li class="editContent">
             <input type="checkbox" aria-label="Search" name="category" value="{{ category.id }}">
@@ -78,7 +92,7 @@
         <div class="col-md-4 product-men">
             <div class="product-shoe-info editContent text-center mt-lg-4" >
                 <div class="men-thumb-item">
-                    <img src="{{ product.image.url }}" width="350" height="500" alt="" >
+                    <a href="{{ product.get_absolute_url }}"><img src="{{ product.image.url }}"  width="350" height="500" alt="" ></a>
                 </div>
                 <div class="item-info-product">
                     <h4 class="">
@@ -103,9 +117,55 @@
                         {% endif %}
                     </div>
                 </div>
+                <div>
+                    <br>
+
+<!--                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}-->
+
+<!--                        <ul class="paginator" style="margin-left: 10px;" >-->
+<!--                            {% if page_obj.has_previous %}-->
+<!--                                <li><a href="?page1">&laquo; first</a></li>-->
+<!--                                <li><a href="?page={{ page_obj.previous_page_number}}">previous</a> </li>-->
+<!--                            {% endif %}-->
+
+<!--                            {% if page_obj.has_next %}-->
+<!--                                <li><a href="?page={{ page_obj.next_page_number }}"> next </a></li>-->
+<!--                                <li><a href="?page={{ page_obj.paginator.num_pages }}"> last </a></li>-->
+<!--                            {% endif %}-->
+                        </ul>
+                    </div>
             </div>
         </div>
         {% endfor %}
+        <nav aria-label="...">
+                      <ul class="pagination">
+
+                          {% if page_obj.has_previous %}
+                          <li class="page-item" >
+                              <a class="page-link" href="?page={{ page_obj.previous_page_number}}"  tabindex="-1"> Previous</a>
+                          </li>
+                          {% endif %}
+
+                          {% for n in page_obj.paginator.page_range %}
+                              {% if page_object.number == n %}
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="?page={{ n }}" > {{ n }} <span
+                                            class="sr-only">(current)</span></a>
+                                </li>
+                              {% elif n > page_obj.number|add:-3 and n < page_obj.number|add:3 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ n }}"> {{ n }}</a>
+                                </li>
+                                {% endif %}
+                          {% endfor %}
+
+                          {% if page_obj.has_next %}
+                              <li class="page-item">
+                                  <a class="page-link" href="?page={{ page_obj.next_page_number }}" tabindex="-1"> Next</a>
+                              </li>
+                          {% endif %}
+                      </ul>
+                    </nav>
         </div>
     </div>
 
