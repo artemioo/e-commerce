@@ -40,6 +40,7 @@ class ProductView(ListView):
     template_name = 'base.html'
     paginate_by = 2
 
+
     def get_queryset(self):
         search_query = self.request.GET.get('search', '')
         category_query = self.request.GET.get('category', '')

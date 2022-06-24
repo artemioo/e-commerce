@@ -20,11 +20,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('favorites/', include('favorites.urls')),
     path('cart/', include('cart.urls')),
     path('order/', include('orders.urls')),
     path('', include('shop.urls')),
     path('accounts/', include('accounts.urls')),
-    path('favorites/', include('favorites.urls')),
+
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
 ]

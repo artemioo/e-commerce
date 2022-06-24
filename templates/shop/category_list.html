@@ -2,7 +2,7 @@
 
 {% block content %}
     <ul> {% for cat in category_list %}
-        <li><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a> </li>
+        <li><h3><a href="{{ cat.get_absolute_url }}" style="text-decoration:none; color: #CD5C5C;">{{ cat.name }}</a></h3> </li>
 
     {% endfor %}
     </ul>

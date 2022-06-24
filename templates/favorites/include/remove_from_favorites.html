@@ -1,6 +1,5 @@
-<form action="{% url 'remove_from_favorites' id=id%}" method="post">
+<form action="{% url 'remove_from_favorites' id=id%}" method="POST">
     {% csrf_token %}
-    <input type="hidden" name="type" value="{{ type }}">
     <input type="hidden" name="url_from" value="{{ request.path }}">
     <button type="submit" class="btn btn-danger"> Удалить из избранного </button>
 </form>

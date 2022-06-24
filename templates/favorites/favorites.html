@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Your shopping cart
+{% endblock %}
+{% block content %}
+
+    <h1>Your favorites</h1>
+{% if request.user.favorites|length == 1 %}
+<h3>Вы еще не добавили ничего в избранное </h3>
+    {% else %}
+<div class="left-ads-display col-lg-9">
+    <div class="row">
+{% for p in request.user.favorites.all %}
+        <div class="col-md-4 product-men">
+<div class="card" style="width: 18rem;">
+    <a href="{{ p.product.get_absolute_url }}"><img src="{{ p.product.image.url }}" class="card-img-top"  width="350" height="500" alt="" ></a>
+  <div class="card-body">
+    <h5 class="card-title">{{ p.product }}</h5>
+    <p class="card-text">{{ p.product.description }}</p>
+    <a href="{{ p.product.get_absolute_url }}" class="btn btn-primary">Go somewhere</a>
+<div class="d-flex">
+        {% include "favorites/include/remove_from_favorites.html" with id=p.product.id %}
+                        </div>
+  </div>
+</div>
+    </div>
+{% endfor %}
+        </div>
+    </div>
+{% endif %}
+    <p class="text-right">
+        <button style="color: #556B2F;"> <a href='/' class="button light" style="text-decoration: none; color: #6495ED">Continue shopping</a> </button>
+
+
+{% endblock %}
