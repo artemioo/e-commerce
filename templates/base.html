@@ -41,7 +41,7 @@
         </div>
         {% if user.is_authenticated %}
         <div class="favortites">
-            <a href="{% url 'favorites_list' %}"> Избранное </a>
+            <a href="{% url 'favorites_list' %}"> My Favorites </a>
 
             <form action="{% url 'delete_favorites' %}" method="post"> {% csrf_token %}
                 <input type="hidden" name="url_from" value="{{ request.path }}">
@@ -58,26 +58,28 @@
 
 
     <div class="jumbotron">
+
+        {{ request.session.cart.keys }} <br>
+        {{ request.session.cart.items }}
         <div>{{ request.session.keys }}</div>
         <div> {{ request.session.items }}</div>
         <div>{{ favorites_list }}</div>
     </div>
+
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
     <hr>
 
 
 <div class="right-side my-4" style="text-align:right; position: right;">
     <form action="{% url 'home' %}">
-        <h3 class="sear-head editContent">Категории</h3>
-        <ul class="w3layouts-box-list" style="list-style-type: none">
-            {% for category in categories %}
-        <li class="editContent">
-            <input type="checkbox" aria-label="Search" name="category" value="{{ category.id }}">
-        <span>  {{ category.name }}</span>
-            </li>
-        {% endfor %}
-        </ul>
-
+        <h3> Filter by price </h3>
         <input  type="number" placeholder="min price" aria-label="Search" name="min_price" min="1"  value="1">
         <br>
         <input  type="number" placeholder="max price" aria-label="Search" name="max_price" min="0">

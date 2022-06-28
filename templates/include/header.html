@@ -21,7 +21,6 @@
         </li>
       <li class="nav-item">
           <a class="nav-link active" href="{% url 'favorites_list' %}">Favorite</a>
-        </li>
         {% if user.is_staff %}
           <li class="nav-item">
           <a class="nav-link active" href="{% url 'admin:index' %}">Admin</a>
@@ -29,7 +28,7 @@
 
         <li>
             {% if user.is_staff %}
-    <a href="{% url 'create' %}">Добавить Товар </a>
+    <a href="{% url 'create' %}">Add product </a>
     {% endif %}
           </li>
         {% endif %}

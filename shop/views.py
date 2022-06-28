@@ -1,14 +1,15 @@
+
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
-from django.db.models import Avg, Max
-from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse, Http404
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from .models import Product, Category
@@ -61,6 +62,7 @@ class ProductView(ListView):
             queryset = Product.objects.filter(price__range=(min_price, max_price))
         else:
             queryset = Product.objects.filter(available=True).select_related('category')
+
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -91,14 +93,15 @@ class Categorize(DetailView):
 #     cart_product_form = CartAddProductForm()
 
 def product_detail(request, slug):
+
     if cache.get(slug):
         product = cache.get(slug)
     else:
         try:
             product = get_object_or_404(Product, slug=slug, available=True)
             cache.set(slug, product)
-        except Product.DoesNotExist:
-            return HttpResponse('This product does not exist')
+        except ObjectDoesNotExist:
+            raise Http404
     cart_product_form = CartAddProductForm()
     return render(request, 'shop/product_detail.html', {'product': product, 'cart_product_form': cart_product_form})
 
