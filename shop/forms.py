@@ -1,3 +1,4 @@
+from captcha.fields import CaptchaField
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
@@ -12,6 +13,8 @@ class CreateProductForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
+    captcha = CaptchaField()
+
     class Meta:
         model = Review
         fields = ('text', )
