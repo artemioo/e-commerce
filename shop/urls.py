@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from .views import ProductView, CategoryView, Categorize, CreateProduct, UpdateProduct, DeleteProduct, product_detail, AddReview
+from .views import ProductView, CategoryView, Categorize, CreateProduct, UpdateProduct, DeleteProduct, ProductDetail, AddReview
 
 urlpatterns = [
     path('', ProductView.as_view(), name='home'),
@@ -12,7 +12,7 @@ urlpatterns = [
     path('delete/<slug:slug>/', login_required(DeleteProduct.as_view()), name='delete'),
     path('review/<int:pk>/', AddReview.as_view(), name='add_review'),
     path('<slug:slug>/products/', Categorize.as_view(), name='categorize'),
-    path('<slug:slug>/', product_detail, name='product_detail'),
+    path('<slug:slug>/', ProductDetail.as_view(), name='product_detail'),
 
 ]
 

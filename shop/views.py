@@ -3,9 +3,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
-from django.http import HttpResponse, Http404
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -80,21 +77,27 @@ class Categorize(DetailView):
     template_name = 'shop/categorize.html'
 
 
-# class ProductDetail(DetailView):
-#     """ Информация о продукте """
-#     model = Product
-#     slug_field = 'slug'
-#     template_name = 'shop/product_detail.html'
-#     cart_product_form = CartAddProductForm()
+class ProductDetail(DetailView):
+    """ Информация о продукте """
+    model = Product
+    slug_field = 'slug'
+    template_name = 'shop/product_detail.html'
 
-def product_detail(request, slug):
-    if cache.get(slug):
-        product = cache.get(slug)
-    else:
-        product = get_object_or_404(Product, slug=slug)
-        cache.set(slug, product)
-    cart_product_form = CartAddProductForm()
-    return render(request, 'shop/product_detail.html', {'product': product, 'cart_product_form': cart_product_form})
+    def get(self, request, *args, **slug):
+        self.slug_field = slug[self.slug_field]
+
+        if cache.get(self.slug_field):
+            self.product = cache.get(self.slug_field)
+        else:
+            self.product = get_object_or_404(self.model, slug=self.slug_field)
+            cache.set(self.slug_field, self.product)
+
+        cart_product_form = CartAddProductForm()
+        context = {
+            'product': self.product,
+            'cart_product_form': cart_product_form
+        }
+        return self.render_to_response(context)
 
 
 class AddReview(View):
