@@ -19,8 +19,11 @@
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'cart_detail' %}">Cart</a>
         </li>
+          {% if user.is_authenticated %}
       <li class="nav-item">
           <a class="nav-link active" href="{% url 'favorites_list' %}">Favorite</a>
+                  </li>
+          {% endif %}
         {% if user.is_staff %}
           <li class="nav-item">
           <a class="nav-link active" href="{% url 'admin:index' %}">Admin</a>

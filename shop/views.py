@@ -1,10 +1,9 @@
-
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.http import HttpResponse, Http404
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -49,10 +48,6 @@ class ProductView(ListView):
         category_query = self.request.GET.get('category', '')
         min_price = self.request.GET.get('min_price', 0)
         max_price = self.request.GET.get('max_price', 0)
-        # mb refactor it's
-        # if max_price or max_price == '':
-        #     min_price = 1
-        #     max_price = Product.objects.aggregate(Max('price'))['price__max']
 
         if search_query:
             queryset = Product.objects.filter(name__icontains=search_query)
@@ -93,15 +88,11 @@ class Categorize(DetailView):
 #     cart_product_form = CartAddProductForm()
 
 def product_detail(request, slug):
-
     if cache.get(slug):
         product = cache.get(slug)
     else:
-        try:
-            product = get_object_or_404(Product, slug=slug, available=True)
-            cache.set(slug, product)
-        except ObjectDoesNotExist:
-            raise Http404
+        product = get_object_or_404(Product, slug=slug)
+        cache.set(slug, product)
     cart_product_form = CartAddProductForm()
     return render(request, 'shop/product_detail.html', {'product': product, 'cart_product_form': cart_product_form})
 

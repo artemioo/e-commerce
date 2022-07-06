@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from shop.models import Product
-
+from django.core.exceptions import ObjectDoesNotExist
 from favorites.models import Favorite
 
 
@@ -45,14 +45,19 @@ def add_to_favorites(request, id):
 
 def remove_from_favorites(request, id):
     if request.method == 'POST':
-        product = Favorite.objects.get(id=id)
-        product.delete()
+        try:
+            product = Favorite.objects.filter(user_id=request.user.id, product_id=id)
+            product.delete()
+            messages.success(request, 'Товар удален из избранного')
+        except ObjectDoesNotExist:
+            messages.error(request, 'Товара не существует')
+            return redirect('/')
 
         if request.session['favorites'] == {}:
             del request.session['favorites']
 
         request.session.modified = True
-    return redirect('favorites_list')
+    return redirect('/')
 
 
 def delete_favorites(request):

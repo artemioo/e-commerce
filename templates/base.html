@@ -7,11 +7,6 @@
       rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>e-commerce</title>
-    <style>
-    .welcome {
-      text-align: right;
-    }
-</style>
 
 </head>
 <body>
@@ -21,10 +16,10 @@
 
      {% block main %}
     {% if user.is_authenticated %}
-    <div class="welcome">
+    <div class="welcome" style="text-align:left; position: left;">
             Welcome, {{ user.username }}. Thanks for logging in. <a href="{% url 'logout' %}">Logout</a>
             {% else %}
-            Welcome, new user. <a href="{% url 'login' %}">Please log in</a> or <a href="{% url 'register' %}">regi</a>
+            Welcome, new user. Please <a href="{% url 'login' %}"> login</a> or <a href="{% url 'register' %}">register</a>
     {% endif %}
         <div class="cart-info">
             {% with total_items=cart|length %}
@@ -39,37 +34,14 @@
             {% endif %}
             {% endwith %}
         </div>
-        {% if user.is_authenticated %}
-        <div class="favortites">
-            <a href="{% url 'favorites_list' %}"> My Favorites </a>
-
-            <form action="{% url 'delete_favorites' %}" method="post"> {% csrf_token %}
-                <input type="hidden" name="url_from" value="{{ request.path }}">
-                            <button type="submit" class="btn btn-danger"> Delete favorites </button>
-            </form>
-        </div>
-        {% endif %}
     </div>
 
-    <h4> твоя session </h4>
 
-    <h2 class="mb-3"> Session key: {{ request.session.session_key }}</h2>
-
-
-
-    <div class="jumbotron">
-
-        {{ request.session.cart.keys }} <br>
-        {{ request.session.cart.items }}
-        <div>{{ request.session.keys }}</div>
-        <div> {{ request.session.items }}</div>
-        <div>{{ favorites_list }}</div>
-    </div>
 
     {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+     {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}
     {% endfor %}
 </ul>
 {% endif %}
@@ -80,9 +52,9 @@
 <div class="right-side my-4" style="text-align:right; position: right;">
     <form action="{% url 'home' %}">
         <h3> Filter by price </h3>
-        <input  type="number" placeholder="min price" aria-label="Search" name="min_price" min="1"  value="1">
+        <input  type="number" placeholder="min price" aria-label="Search" name="min_price"  value="1">
         <br>
-        <input  type="number" placeholder="max price" aria-label="Search" name="max_price" min="0">
+        <input  type="number" placeholder="max price" aria-label="Search" name="max_price" >
         <br>
 
         <button class="btn btn-outline-success" type="submit">Search</button>

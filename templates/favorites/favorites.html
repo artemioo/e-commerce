@@ -31,6 +31,10 @@
 {% endif %}
     <p class="text-right">
         <button style="color: #556B2F;"> <a href='/' class="button light" style="text-decoration: none; color: #6495ED">Continue shopping</a> </button>
-
+            <form action="{% url 'delete_favorites' %}" method="post"> {% csrf_token %}
+                <input type="hidden" name="url_from" value="{{ request.path }}">
+                            <button type="submit" class="btn btn-danger"> Delete favorites </button>
+            </form>
+        </div>
 
 {% endblock %}
